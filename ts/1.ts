@@ -5,6 +5,7 @@ const addFun: Add = (a, b) => {
 addFun(1, 2);
 interface A {
   name: string;
+
   age: number;
   say(word: string): string;
 }
