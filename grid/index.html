@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+  </head>
+  <style>
+    body {
+      display: flex;
+      flex-flow: row nowrap;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      width: 100vw;
+    }
+    .grid-box {
+      display: grid;
+      width: 500px;
+      height: 600px;
+      background-color: #313028;
+      border-radius: 10px;
+      padding: 10px;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(6, 1fr);
+      grid-template-areas:
+        "phone hello hello light"
+        "phone detail checkout checkout"
+        "shopping person checkout checkout"
+        "shopping person green-woman green-woman"
+        "bolt bolt green-woman green-woman"
+        "bolt bolt list charge";
+      gap: 10px;
+    }
+    .grid-item {
+      background-color: burlywood;
+      border-radius: 10px;
+    }
+    .phone {
+      grid-area: phone;
+      /*grid-column: 1 /2;*/
+      /*grid-row: 1 / 3;*/
+    }
+    .hello {
+      grid-area: hello;
+      /*grid-column: 2 /4;*/
+      /*grid-row: 1/2;*/
+    }
+    .light {
+      grid-area: light;
+      /*grid-column: 4 /5;*/
+      /*grid-row: 1/2;*/
+    }
+    .shopping {
+      grid-area: shopping;
+      /*grid-column: 1 /2;*/
+      /*grid-row: 3 /5;*/
+    }
+    .detail {
+      grid-area: detail;
+      /*grid-column: 2 /3;*/
+      /*grid-row: 2 /3;*/
+    }
+    .person {
+      grid-area: person;
+      /*grid-column: 2 /3;*/
+      /*grid-row: 3 /5;*/
+    }
+    .checkout {
+      grid-area: checkout;
+      /*grid-column: 3/5;*/
+      /*grid-row: 2 /4;*/
+    }
+    .bolt {
+      grid-area: bolt;
+
+      /*grid-column: 1/3;*/
+      /*grid-row: 5 /7;*/
+    }
+    .green-woman {
+      grid-area: green-woman;
+      /*grid-column: 3/5;*/
+      /*grid-row: 4 /6;*/
+    }
+    .list {
+      grid-area: list;
+      /*grid-column: 3/4;*/
+      /*grid-row: 6 /7;*/
+    }
+    .charge {
+      grid-area: charge;
+      /*grid-column: 4/5;*/
+      /*grid-row: 6 /7;*/
+    }
+  </style>
+  <body>
+    <div class="grid-box">
+      <div class="grid-item phone"></div>
+      <div class="grid-item hello"></div>
+      <div class="grid-item light"></div>
+      <div class="grid-item shopping"></div>
+      <div class="grid-item detail"></div>
+      <div class="grid-item person"></div>
+      <div class="grid-item checkout"></div>
+      <div class="grid-item bolt"></div>
+      <div class="grid-item green-woman"></div>
+      <div class="grid-item list"></div>
+      <div class="grid-item charge"></div>
+    </div>
+  </body>
+</html>

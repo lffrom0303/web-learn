@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>《8分钟学会 Vue.js 原理》：一、template 字符串编译为抽象语法树 AST</title>
+</head>
+<body>
+<h2>《8分钟学会 Vue.js 原理》：一、template 字符串编译为抽象语法树 AST</h2>
+<h3>请打开浏览器控制台调试</h3>
+<a href="https://github.com/JuniorTour/blog/issues/7" target="_blank">
+  <h3>GitHub 原文链接：https://github.com/JuniorTour/blog/issues/7</h3>
+</a>
+
+<div id="app"></div>
+
+<script id="VueCompilerModule">
+  const defaultTagRE = /\{\{((?:.|\r?\n)+?)\}\}/
+  function parseText(text) {
+    let tokens = []
+    let rawTokens = []
+    const match = defaultTagRE.exec(text)
+
+    const exp = match[1]
+    tokens.push(("_s(" + exp + ")"))
+    rawTokens.push({ '@binding': exp })
+
+    return {
+      expression: tokens.join('+'),
+      tokens: rawTokens
+    }
+  }
+
+  class HTMLParser {
+    startTagOpen = /^<([a-zA-Z_]*)/
+    startTagClose = /^\s*(\/?)>/
+    endTag = /^<\/([a-zA-Z_]*)[^>]*>/
+
+    parseHTML(html, options) {
+      const advance = (n) => {
+        html = html.substring(n)
+      }
+
+      const parseStartTag = () => {
+        let start = html.match(this.startTagOpen)
+        // ['<div', 'div']
+        if (start) {
+          const match = {
+            tagName: start[1],
+            attrs: [],
+          }
+          advance(start[0].length)
+          const end = html.match(this.startTagClose)
+          debugger
+          if (end) {
+            advance(end[0].length)
+          }
+          return match
+        }
+      }
+
+      const handleStartTag = (match) => {
+        if (options.start) {
+          options.start(match.tagName)
+        }
+      }
+
+      while (html) {
+        debugger
+        // 顺序对逻辑有影响，startTag 要先于 text，endTag 要先于 startTag
+        let endTagMatch = html.match(this.endTag)
+        if (endTagMatch) {
+          advance(endTagMatch[0].length)
+          continue
+        }
+
+        const startTag = parseStartTag()
+        if (startTag) {
+          handleStartTag(startTag)
+          continue
+        }
+
+        let text
+        let textEnd = html.indexOf('<')
+        if (textEnd >= 0) {
+          text = html.substring(0, textEnd)
+        }
+
+        if (text) {
+          advance(text.length)
+        }
+
+        if (options.chars && text) {
+          options.chars(text)
+        }
+      }
+    }
+  }
+
+  class VueCompiler {
+    HTMLParser = new HTMLParser()
+
+    createASTElement (tag, parent) {
+      return { type: 1, tag, parent, children: [] }
+    }
+
+    parse(template) {
+      const _this = this
+      let root
+      let currentParent
+
+      this.HTMLParser.parseHTML(template, {
+        start(tag) {
+          let element = _this.createASTElement(tag, currentParent)
+
+          if (!root) {
+            root = element
+          }
+          currentParent = element
+          debugger
+        },
+        chars (text) {
+          debugger
+          const res = parseText(text)
+          const child = {
+            type: 2,
+            expression: res.expression,
+            tokens: res.tokens,
+            text
+          }
+          if (currentParent) {
+            currentParent.children.push(child)
+          }
+        },
+      })
+
+      debugger
+      return root
+    }
+
+    compile(template) {
+      const ast = this.parse(template)
+      console.log(`一、《template 字符串编译为抽象语法树 AST》`)
+      console.log(`ast = ${JSON.stringify(ast, null, 2)}`)
+    }
+  }
+</script>
+
+<script id="VueModule">
+  class Vue {
+    compiler = new VueCompiler()
+    options
+
+    constructor(options) {
+      this.options = options
+
+      this.init()
+    }
+
+    init() {
+      debugger
+      this.compiler.compile(this.options.template)
+    }
+  }
+
+  const vm = new Vue({
+    el: "#app",
+    template: `<div>{{msg}}</div>`,
+    data() {
+      return {
+        msg: 'hi, Vue.js'
+      }
+    },
+  })
+
+  // 双向绑定
+  // vm.msg = '双向绑定触发 DOM 更新'
+</script>
+
+</body>
+</html>
