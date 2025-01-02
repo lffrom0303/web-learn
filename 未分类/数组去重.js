@@ -11,12 +11,14 @@ function unique(arr) {
   }
   return array;
 }
+
 function unique(arr) {
   let obj = {};
   return arr.filter((item) =>
     obj.hasOwnProperty(item) ? false : (obj[item] = true)
   );
 }
+
 function unique(arr) {
   for (let i = 0; i < arr.length; i++) {
     for (let j = i + 1; j < arr.length; j++) {
