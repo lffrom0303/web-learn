@@ -1,0 +1,16 @@
+{
+  "name": "my-eslint-extension",
+  "version": "1.0.0",
+  "main": "plugins.js",
+  "scripts": {
+    "lint": "eslint ."
+  },
+  "type": "module",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "eslint": "^9.17.0"
+  }
+}
